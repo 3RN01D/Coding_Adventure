@@ -1,0 +1,150 @@
+
+# Window Background
+import turtle
+
+wn = turtle.Screen()
+wn.title("Pong by ERNOID")
+wn.bgcolor("Black")
+wn.setup(width=800, height=600)
+wn.tracer(0)
+team_a = turtle.textinput("Team A", "Choose your Name")
+team_b = turtle.textinput("Team B", "Choose your Name")
+
+# Score
+score_a = 0
+score_b = 0
+
+main_text = f"[ {score_a} ] {team_a}                        {team_b} [ {score_b} ]"
+main_align = "center"
+main_font = ("Arial", 24, "bold")
+
+
+# Paddle A Left
+paddle_a = turtle.Turtle()
+paddle_a.speed(0)
+paddle_a.shape("square")
+paddle_a.color("Red")
+paddle_a.shapesize(stretch_wid=5, stretch_len=1)
+paddle_a.penup()
+paddle_a.goto(-350, 0)
+
+
+# Paddle B Right
+paddle_b = turtle.Turtle()
+paddle_b.speed(0)
+paddle_b.shape("square")
+paddle_b.color("Blue")
+paddle_b.shapesize(stretch_wid=5, stretch_len=1)
+paddle_b.penup()
+paddle_b.goto(350, 0)
+
+
+# Ball
+ball = turtle.Turtle()
+ball.speed(0)
+ball.shape("circle")
+ball.color("White")
+ball.shapesize(stretch_wid=1, stretch_len=1)
+ball.penup()
+ball.goto(0, 0)
+ball.dx = 0.5
+ball.dy = 0.5
+
+
+# Pen
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color("White")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 260)
+pen.write(main_text, align=main_align, font=main_font)
+
+
+# Functions
+
+    # Paddle Left
+def paddle_a_up():
+    if paddle_a.ycor() < 220:
+        y = paddle_a.ycor()
+        y += 40
+        paddle_a.sety(y)
+
+def paddle_a_down():
+    if paddle_a.ycor() > -220:
+        y = paddle_a.ycor()
+        y -= 40
+        paddle_a.sety(y)
+
+    # Paddle Right
+def paddle_b_up():
+    if paddle_b.ycor() < 220:
+        y = paddle_b.ycor()
+        y += 40
+        paddle_b.sety(y)
+
+def paddle_b_down():
+    if paddle_b.ycor() > -220:
+        y = paddle_b.ycor()
+        y -= 40
+        paddle_b.sety(y)
+
+
+# Keyboard Binding
+
+    # Paddle Left
+wn.listen()
+wn.onkeypress(paddle_a_up, "w")
+wn.onkeypress(paddle_a_down, "s")
+
+    # Paddle Right
+wn.listen()
+wn.onkeypress(paddle_b_up, "Up")
+wn.onkeypress(paddle_b_down, "Down")
+
+
+
+# Main game loop
+while True:
+    wn.update()
+
+
+    # Move the Ball
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
+
+
+    # Border Check
+    if ball.ycor() > 290:
+        ball.sety(290)
+        ball.dy *= -1
+    
+    if ball.xcor() > 390:
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score_a + 1
+
+    if ball.ycor() < -290:
+        ball.sety(-290)
+        ball.dy *= -1
+
+    if ball.xcor() < -390:
+        ball.goto(0, 0)
+        ball.dx *= -1
+        score_b + 1
+
+    # Paddle and Ball Collision
+
+    if (ball.xcor() > 330 and ball.xcor() < 340) and (ball.ycor() < paddle_b.ycor() + 50 and ball.ycor() > paddle_b.ycor() -50):
+        ball.setx(330)
+        ball.dx *= -1
+        paddle_b.shapesize(stretch_wid=6, stretch_len=2)
+        paddle_b.color("White")
+        
+    
+    if (ball.xcor() < -330 and ball.xcor() >- 340) and (ball.ycor() > paddle_a.ycor() - 50 and ball.ycor() < paddle_a.ycor() +50):
+        ball.setx(-330)
+        ball.dx *= -1
+        paddle_a.shapesize(stretch_wid=6, stretch_len=2)
+        paddle_a.color("White")
+        
